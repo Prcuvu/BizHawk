@@ -2,6 +2,57 @@
 
 ## changes from 2.8 to 2.9
 
+- Misc. changes to EmuHawk:
+	- Fix Windows Lock Screen breaking hotkeys (#3161)
+	- Warn user if currently set firmware does not match the firmware reported in movie header
+	- Allow negative values to be entered in RAM Watch for fixed-point watches (#3175)
+	- Fix .gmv importer not setting the Core name in the header of the resulting .bk2
+	- Fix regression where screenshots from some cores were transparent (#3166)
+	- Make DirectX optional on Windows (prereq installer will still install it, as it is the fastest option)
+	- Fix edge case load failures if the game name does not match the name of the rom
+	- Fix opening roms from "jump list" in Windows shell / file manager (#3224)
+	- Improve UX of loading a savestate from an older (or newer) version
+	- Fix shaders' height being used for width
+	- Finish UX for merging/unmerging LShift+RShift and other modifier keys (#3184, #3257)
+	- Do not rely on non-deterministic Dictionary ordering for Axis names, fixes .dsm importing
+	- Do not offer to remove the missing file from recent roms when it's not actually missing, it just failed to load (#3006)
+	- Fix hotkeys triggering accidentally in Virtual Pad on Windows (#3087)
+	- Increase precision when tweaking axis sensitivity/deadzone (#3038)
+	- Fix category radio buttons being cut off in Messages config
+	- Restore "priority" option for U+D/L+R policy, and make it the default again (#2752)
+	- Refactor firmware config so the acceptability status icons make sense (#3157)
+	- Fix "Screenshot (raw) -> Clipboard" not showing keybind hint
+	- Add UI for editing any core's Settings/Sync Settings without it being loaded (except for the unreleased MAME core)
+	- Fix strange behaviour when trying to extract archive which contains folders
+	- Bump FFmpeg to 4.4.1, add auto-download to Linux port (#3259, #2457)
+	- Reorder `Config` > `Preferred Cores` submenu
+	- Remove some unnecessary prompts to reboot core
+	- Move "Save Window Position" for main window to `Config` > `Display...` > `Window` and add a "Stay on Top"
+	- Fix Windows version detection and enable warning for unsupported versions (#2972, #3194)
+	- Fix some systems not having a name to display in the window title
+	- Fix MSX rom loading
+	- Make disc extension detection case-insensitive
+	- Fix Debugger breakpoint crash with mGBA (#3287)
+- Linux port:
+	- Fix various file pickers using case-sensitive file extensions
+	- Change default Lua engine to "NLua+KopiLua" which doesn't seem to crash on normal Mono builds like the other one does
+	- Add short-circuit to Mupen64Plus loading to avoid error messages and any strange failure state
+	- Adjusted alignment and size of UI elements in Record Movie dialog so they don't overlap... again
+- TAStudio:
+	- Fix "Select between Markers" hotkey not working
+	- Fix .tasproj version writing differing based on locale (e.g. , instead of .)
+- Lua/ApiHawk:
+	- (Lua) Pass arguments (addr, val, flags) to Lua memory callback functions (use `event.can_use_callback_params` when writing polyfills)
+	- (ApiHawk) Merge `IGameInfoApi` into `IEmulationApi`, plus some other minor method signature changes
+	- (Lua) Fix Lua referencing a core after it's unloaded, making scripts crash (#3226)
+	- (Lua/ApiHawk) Fix `event.onmemoryread` behaviour under mGBA (#3230)
+	- (Lua/ApiHawk) Properly handle removing memory callbacks from within a callback (#1823)
+	- (Lua) Use `ClientSize` when resizing Lua Forms (#3034)
+	- (ApiHawk) Change injector to include non-public properties when looking for `ApiContainer`
+	- (ApiHawk) Migrate from `CoreSystem` enum to `VSystemID` const strings
+	- (Lua) Fix encoding bug which caused e.g. Japanese text to become mojibake/garbled (#190, #2041)
+
+
 [13456e51b CPP] (Virtu) changed RTC to use deterministic time when recording instead of system time
 
 [948049bb2 CPP] (Genplus-gx) stopped byteswapping Z80 domains (#3290)
@@ -9,10 +60,6 @@
 [d3d90eb70 CPP] fixed Debugger breakpoint crash with mGBA (#3287)
 
 [4df256cd6 CPP] (Virtu) fixed some internal state not being overwritten by savestates
-
-[1241758ec Yoshi] Make `Disc.IsValidExtension` helper case-insensitive WRITEME
-
-[fea85649b Morilli] Fix tasproj version writing not using invariant culture WRITEME
 
 [5afb6ca45 Yoshi] fixed `InvalidOperationException` when using SMS peripherals (#3282)
 
@@ -22,31 +69,13 @@
 
 [2c3b6b3cd CPP] (TIC-80) new core (nesbox' own reference implementation)
 
-[2e46d1398 Yoshi] fixed MSX rom loading
-
-[2e46d1398 Yoshi] fixed some systems not having a name to display in the window title
-
-[587855522 Yoshi] fixed Windows version detection and enabled warning for unsupported versions (#2972, #3194)
-
-[a98e3f361 Yoshi] (Linux) adjusted alignment and size of UI elements in Record Movie dialog so they don't overlap... again
-
-[2d015515b Yoshi] moved "Save Window Position" for main window to `Config` > `Display...` > `Window` and added a "Stay on Top"
-
 [0174abde6 CPP] (a26) fix crash when pushing Select on Karate title screen
 
-[8869570bc Yoshi] removed some unnecessary prompts to reboot core
-
-[c70e87af2 Yoshi] reordered `Config` > `Preferred Cores` submenu
-
 [f5d8c0fb1 Yoshi] (Genplus-gx) changed default peripheral to 3-button Genesis gamepad (#2775, #3262)
-
-[6d726a102 feos] bump FFmpeg to 4.4.1, add auto-download to Linux port (#3259)
 
 [1c27c73c8 CPP] fixed disc switching for Nymashock and Saturnus
 
 [0c95088e0 CPP] (VirtualBoyee) updated to Mednafen 1.29.0
-
-[b3d344b00 Yoshi] fixed strange behaviour when trying to extract archive which contains folders
 
 [e6d74c316 CPP] (Faust) updated to Mednafen 1.29.0
 
@@ -64,72 +93,17 @@
 
 [cd9327a10 CPP] (mGBA) updated to interim version after 0.9.3
 
-[a455cce2d Yoshi] added UI for editing any core's settings/syncsettings without it being loaded
-
 [0d42459be Yoshi] (CPCHawk) removed redundant `AmstradCpcPokeMemory` tool
 
 [3fe168ad0 CPP] (melonDS) updated to interim version after 0.9.4
 
 [9a73be0e2 CPP] (SameBoy) updated to interim version after 0.14.7, fixing some bugs and adding GB palette customiser (#3185, #3239)
 
-[95ecbe998 Yoshi] fixed "Screenshot (raw) -> Clipboard" not showing keybind hint
-
-[48cfc7988 Morilli] (TAStudio) fixed "Select between Markers" hotkey not working
-
-[09061843f Yoshi] (Lua) fixed encoding bug which caused e.g. Japanese text to become mojibake/garbled (#190, #2041)
-
-[9bdf043f3 Yoshi] (ApiHawk) migrate from `CoreSystem` enum to `VSystemID` const strings
-
-[1026503d9 Yoshi] refactored firmware config so the acceptability status icons make sense (#3157)
-
-[af2d8da36 Yoshi] restored "priority" option for U+D/L+R policy, and made it the default again (#2752)
-
-[fd4771c45 Yoshi] fixed category radio buttons being cut off in Messages config
-
-[71150c60d Yoshi] (ApiHawk) changed injector to include non-public properties when looking for `ApiContainer`
-
-[6e46cb550 Yoshi] (Linux) added short-circuit to Mupen64Plus loading to avoid error messages and any strange failure state
-
-[afc442462 Yoshi] Use `ClientSize` when resizing Lua Forms (see #3034) WRITEME
-
-[b4ca2f9de Yoshi] increased precision when tweaking axis sensitivity/deadzone (#3038)
-
-[5f820cc53 Yoshi] fixed hotkeys triggering accidentally in Virtual Pad on Windows (#3087)
-
-[41de03e31 Yoshi] (Linux) changed default Lua engine to "NLua+KopiLua" which doesn't seem to crash on normal Mono builds like the other one does
-
 [c93ceae46 Yoshi] fixed typo in Snes9x sound settings bitfield (#1208)
-
-[cb42e8c4d Yoshi] stopped offering to remove missing file from recent roms when it's not actually missing, it just failed to load (#3006)
-
-[d90166e1e CPP] try to fix dsm importing (thanks microsoft for making dictionary order undefined) WRITEME
 
 [25fb81698 CPP] (Libretro) rewrote Libretro host implementation, fixing some crashes, adding memory domains, and slightly improving performance (#3211, #3216)
 
-[635fff6c5 Yoshi] Handle removing mem callbacks from within a callback (resolves #1823) WRITEME
-
-[ceb64cedb Yoshi] finished UX for merging/unmerging LShift+RShift and other modifier keys (#3184, #3257)
-
-[5a913ac2a notwa] fixed shaders' height being used for width
-
-[ee241dc62 Yoshi] improved UX of loading a savestate from an older (or newer) version
-
-[53240c2f8 Yoshi] fixed opening roms from "jump list" in Windows shell / file manager (#3224)
-
-[b39631b24 CPP] (ApiHawk/Lua) fixed `event.onmemoryread` behaviour under mGBA (#3230)
-
-[14984aea2 Morilli] Change RomDirectory to RomPath in RomAsset WRITEME
-for the current (only) usecase, this fixes failures when "RomAsset.Name" is not equal to the name of the rom on disk
-
-[de1d8f56d Yoshi] made DirectX optional on Windows (it's still in the prereq installer because it's the fastest)
-
-[a08116f2d CPP] fixed Lua referencing a core after it's unloaded, making scripts crash (#3226)
-
-[7d268e244 CPP] fixed regression where screenshots from some cores were transparent (#3166)
-
 [c496c97c8 CPP] remove some render off logic (this might not be sync safe), move threaded rendering to a sync setting (this probably doesn't affect sync, but best be safe here) WRITEME
-
-[93dadb021 CPP] make sure core name is set for GENS importer WRITEME
 
 [97a11ec08 CPP] fix NESHawk mistakenly having cycle count complained about WRITEME
 
@@ -148,11 +122,7 @@ seems to have been a null reference on init. saving seems to still function fine
 
 [a68c835a4 CPP] (Gambatte) update gambatte WRITEME (m161, MBC1, HuC1, HuC3, MMM01)
 
-[6db532fb8 Morilli] Allow negative values to be entered in ram watch for fixed-point watches (#3181) WRITEME
-
 [ccac4d100 CPP] Ares64 WRITEME
-
-[f8a688d47 Yoshi] (Linux) fixed various file pickers using case-sensitive file extensions
 
 [3726cc629 Morilli] fixed #3173 by only calling bus.map() on initial power, not subsequent calls (#3176) WRITEME
 
@@ -176,16 +146,7 @@ seems to have been a null reference on init. saving seems to still function fine
 
 [0ff69c560 CPP] fixed SXROM Detection (#3170) WRITEME
 
-[b82ac3e2d Yoshi] (ApiHawk) Merge `IGameInfoApi` into `IEmulationApi`, plus some other minor method signature changes
-
-[8b07f9ecd Yoshi] Compare firmware customisations to movie header (partial fix for #2498) WRITEME
-
-[d466c2694 Yoshi] s/Win/Super/ in Input, preventing its use as a modifier key WRITEME
-see #3161
-
 [7b857e7ac alyosha] SMS: only update tone on second byte write, filter out highest frequency, fixes #3160 WRITEME
-
-[8385337e7 Yoshi] (Lua) pass arguments (addr, val, flags) to Lua memory callback functions--use `event.can_use_callback_params` when writing polyfills
 
 ## changes from 2.7 to 2.8
 
