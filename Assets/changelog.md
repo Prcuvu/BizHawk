@@ -51,102 +51,84 @@
 	- (ApiHawk) Change injector to include non-public properties when looking for `ApiContainer`
 	- (ApiHawk) Migrate from `CoreSystem` enum to `VSystemID` const strings
 	- (Lua) Fix encoding bug which caused e.g. Japanese text to become mojibake/garbled (#190, #2041)
-
-
-[13456e51b CPP] (Virtu) changed RTC to use deterministic time when recording instead of system time
-
-[948049bb2 CPP] (Genplus-gx) stopped byteswapping Z80 domains (#3290)
-
-[d3d90eb70 CPP] fixed Debugger breakpoint crash with mGBA (#3287)
-
-[4df256cd6 CPP] (Virtu) fixed some internal state not being overwritten by savestates
-
-[5afb6ca45 Yoshi] fixed `InvalidOperationException` when using SMS peripherals (#3282)
-
-[1d4e7dd3f Morilli] (BSNESv115+) rework Payload peripheral and fix Virtual Pads
-
-[363afcd55 Morilli] (BSNESv115+) improve peripheral selection for P1
-
-[2c3b6b3cd CPP] (TIC-80) new core (nesbox' own reference implementation)
-
-[0174abde6 CPP] (a26) fix crash when pushing Select on Karate title screen
-
-[f5d8c0fb1 Yoshi] (Genplus-gx) changed default peripheral to 3-button Genesis gamepad (#2775, #3262)
-
-[1c27c73c8 CPP] fixed disc switching for Nymashock and Saturnus
-
-[0c95088e0 CPP] (VirtualBoyee) updated to Mednafen 1.29.0
-
-[e6d74c316 CPP] (Faust) updated to Mednafen 1.29.0
-
-[e6d74c316 CPP] (HyperNyma) updated to Mednafen 1.29.0
-
-[e6d74c316 CPP] (TurboNyma) updated to Mednafen 1.29.0
-
-[e6d74c316 CPP] (NeoPop) updated to Mednafen 1.29.0
-
-[e6d74c316 CPP] (T. S. T.) updated to Mednafen 1.29.0
-
-[e6d74c316 CPP] (Nymashock) updated to Mednafen 1.29.0
-
-[e6d74c316 CPP] (Saturnus) updated to Mednafen 1.29.0
-
-[cd9327a10 CPP] (mGBA) updated to interim version after 0.9.3
-
-[0d42459be Yoshi] (CPCHawk) removed redundant `AmstradCpcPokeMemory` tool
-
-[3fe168ad0 CPP] (melonDS) updated to interim version after 0.9.4
-
-[9a73be0e2 CPP] (SameBoy) updated to interim version after 0.14.7, fixing some bugs and adding GB palette customiser (#3185, #3239)
-
-[c93ceae46 Yoshi] fixed typo in Snes9x sound settings bitfield (#1208)
-
-[25fb81698 CPP] (Libretro) rewrote Libretro host implementation, fixing some crashes, adding memory domains, and slightly improving performance (#3211, #3216)
-
-[c496c97c8 CPP] remove some render off logic (this might not be sync safe), move threaded rendering to a sync setting (this probably doesn't affect sync, but best be safe here) WRITEME
-
-[97a11ec08 CPP] fix NESHawk mistakenly having cycle count complained about WRITEME
-
-[db7d72be9 Morilli] update nonfunctional bsnes links WRITEME
-
-[672ad1579 Morilli] fixed #3195 WRITEME
-
-[688adf27e CPP] resolve #3192
-seems to have been a null reference on init. saving seems to still function fine after this change WRITEME
-
-[3d039934a Morilli] BSNESv115+: expose fast dsp and fast coprocessor options WRITEME
-
-[339d34413 Morilli] Implement msu1 handling for bsnes115+ (#3190) WRITEME
-
-[da2a20e55 Morilli] BSNESv115+: Some general cleanup, remove nonfunctional msu1 code WRITEME
-
-[a68c835a4 CPP] (Gambatte) update gambatte WRITEME (m161, MBC1, HuC1, HuC3, MMM01)
-
-[ccac4d100 CPP] Ares64 WRITEME
-
-[3726cc629 Morilli] fixed #3173 by only calling bus.map() on initial power, not subsequent calls (#3176) WRITEME
-
-[6e4a5a96a CPP] (melonDS) reset caches after load state WRITEME
-
-[8b6f1c96d CPP] (melonDS) don't state sound buffers too WRITEME
-
-[4bfb3ba48 CPP] (melonDS) don't state these big caches WRITEME
-
-[46c2d6faf CPP] (melonDS) Cleanups & Updates & Prep For Multithread Rendering Support & Prep For DSi NAND bs (#3174) WRITEME
-
-[9411e659b zeromus] (NesHawk) WritePrg really needs to be masking the address... there's no way it's correct, otherwise. WRITEME
-
-[fcce7b64d zeromus] (NesHawk) relaxed restriction on vrc1 PRG registers, so they can be larger than the original vrc1 chip allows (for rom-expanding hacks)
-
-[114124c82 CPP] BSNES Region Override (#3169) WRITEME
-
-[4bac1bbf1 CPP] (melonDS) fixed SaveRAM not getting written to disk when unloading/reloading core (#3165)
-
-[6cb44e0e8 Yoshi] (ZXHawk) removed redundant `ZXSpectrumPokeMemory` tool
-
-[0ff69c560 CPP] fixed SXROM Detection (#3170) WRITEME
-
-[7b857e7ac alyosha] SMS: only update tone on second byte write, filter out highest frequency, fixes #3160 WRITEME
+- New and graduating cores:
+	- Ares64:
+		- Ares64 (Performance) has been removed, with Ares64 (Accuracy) becoming the singular Ares64 core
+		- Ares64 is no longer experimental
+		- Angrylion-rdp integrated for RDP and VI emulation, fixing many issues the MAME RDP had
+		- Fix A/V Sync when interlaced
+		- Add transfer pak support and N64 mouse support
+		- Add more debugging features (tracer, disassembler, get registers, System Bus domain)
+		- Update to interim version after v128
+		- Fix tracer regression from upstream update
+	- TIC-80:
+		- New experimental core for the TIC-80 fantasy computer, using nesbox's own reference implementation
+- Other cores:
+	- A2600Hawk:
+		- Fix crash when pushing Select on Karate title screen
+	- BSNES:
+		- Fix graphics debugger exception when freezing a tile (#3195)
+		- Fix broken upstream links
+	- BSNESv115+:
+		- Add region override settings
+		- Fix loading a savestate crashing after a reset (#3173)
+		- Various internal cleanup
+		- Properly implement MSU1
+		- Add fast DSP and fast coprocessor settings
+		- Fix broken upstream links
+		- Improve peripheral selection for P1
+		- Rework Payload peripheral and fix Virtual Pads
+	- CPCHawk:
+		- Remove redundant `AmstradCpcPokeMemory` tool
+	- Gambatte:
+		- Improve MBC1/MBC1M emulation
+		- Improve HuC1 emulation and implement HuC1 IR support
+		- Improve HuC3 emulation and implement support for mapper sound (HuC3 is currently the only use case)
+		- Implement MMM01 emulation
+		- Implement M161 emulation
+		- Improve heuristics for various multicart mappers and remove the multicart detection setting (now effectively always true)
+		- Internal mapper, IR, and RTC code cleanup
+		- Various optimizations toward the CPU loop and read/write code (around 10-15% performance increase)
+		- Initial time settings trimmed down to a single setting, using total number of seconds
+		- Implement quirk with bit 4 of rLCDC, fixes cgb-acid-hell
+		- Fix sprite priority in CGB-DMG mode
+	- Genplus-gx:
+		- Change default peripheral to 3-button Genesis gamepad (#2775, #3262)
+		- Stop byteswapping Z80 domains (#3290)
+	- Libretro:
+		- Rewrote Libretro host implementation, fixing some crashes, adding memory domains, and slightly improving performance (#3211, #3216)
+	- melonDS:
+		- Update to interim version after 0.9.4
+		- Fix SaveRAM not getting written to disk when unloading/reloading core (#3165)
+		- Implement threaded renderer support
+		- Replace darm with a new DS centric disassembler, fixing various issues with tracing/disassembly
+		- Split ARM7/touch screen polls to an "alt lag" variable and add a setting for whether to consider this "alt lag" (#3278)
+		- Reduce state size a bit
+		- Various internal cleanups
+	- mGBA:
+		- Update to interim version after 0.9.3, fixing a softlock in Hamtaro: Ham Ham Heartbreak (#2541)
+	- NesHawk:
+		- Fix SXROM Detection (#3168)
+		- Fix crash for Namco 163 mapper (#3192)
+		- Relax restrictions on VRC1 PRG registers, so they can be larger than the original VRC1 chip allows (for rom-expanding hacks)
+		- Mask PGR writes for VRC1
+		- "Unimplement" `ICycleTiming`, fixes regular NesHawk trying to use cycle timing (only intended for SubNesHawk)
+	- Nyma cores (Faust, HyperNyma, NeoPop, Nymashock, Saturnus, T. S. T., TurboNyma, VirtualBoyee):
+		- Move VirtualBoyee to Nyma system
+		- Update to Mednafen 1.29.0
+		- Fix disc switching for disc based cores (Nymashock/Saturnus)
+	- SameBoy:
+		- Update to interim version after 0.14.7, fixing some bugs and adding GB palette customiser (#3185, #3239)
+	- SMSHawk:
+		- Fix screechy/static audio during Sega logo in Ys (Japan) (#3160)
+		- Fix `InvalidOperationException` when using SMS peripherals (#3282)
+	- Snes9x:
+		- Fix typo in Snes9x sound settings bitfield (#1208)
+	- Virtu:
+		- Fix some keyboard state not being savestated
+		- Change RTC to use deterministic time when recording instead of system times
+	- ZXHawk:
+		- Remove redundant `ZXSpectrumPokeMemory` tool
 
 ## changes from 2.7 to 2.8
 
