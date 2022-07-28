@@ -6,6 +6,7 @@ using System.IO;
 using BizHawk.Common;
 using BizHawk.Emulation.Common;
 using BizHawk.Emulation.Cores.Components.W65816;
+using BizHawk.Emulation.Cores.Nintendo.SNES;
 
 // http://wiki.superfamicom.org/snes/show/Backgrounds
 
@@ -66,12 +67,6 @@ namespace BizHawk.Emulation.Cores.Nintendo.BSNES
 			};
 
 			Api = new BsnesApi(CoreComm.CoreFileProvider.DllPath(), CoreComm, callbacks.AllDelegatesInMemoryOrder());
-
-			void OnScanlineHooksChanged()
-			{
-//				if (!_disposed) Api.QUERY_set_scanlineStart(ScanlineHookManager.HookCount == 0 ? null : _scanlineStartCb);
-			}
-			ScanlineHookManager = new MyScanlineHookManager(OnScanlineHooksChanged);
 
 			_controllers = new BsnesControllers(_syncSettings);
 
@@ -330,28 +325,17 @@ namespace BizHawk.Emulation.Cores.Nintendo.BSNES
 			}
 		}
 
-		public SNES.SnesColors.ColorType CurrPalette { get; private set; } = SNES.SnesColors.ColorType.BizHawk;
+		public SnesColors.ColorType CurrPalette => SnesColors.ColorType.BSNES;
 
-		public void SetPalette(string palette)
+		public void SetPalette(SnesColors.ColorType colorType)
 		{
-			if (Enum.TryParse<SNES.SnesColors.ColorType>(palette, out var ct)) CurrPalette = ct;
+			if (colorType != SnesColors.ColorType.BSNES)
+				throw new NotImplementedException("This core does not currently support different palettes.");
 		}
 
-		public SNES.ISNESGraphicsDecoder CreateGraphicsDecoder()
-			=> new SNESGraphicsDecoder(Api);
+		public ISNESGraphicsDecoder CreateGraphicsDecoder() => new SNESGraphicsDecoder(Api);
 
-		public SNES.ScanlineHookManager ScanlineHookManager { get; }
-
-		public sealed class MyScanlineHookManager : SNES.ScanlineHookManager
-		{
-			private readonly Action _onHooksChanged;
-
-			public MyScanlineHookManager(Action onHooksChanged)
-				=> _onHooksChanged = onHooksChanged;
-
-			protected override void OnHooksChanged()
-				=> _onHooksChanged();
-		}
+		public ScanlineHookManager ScanlineHookManager => null;
 
 		private void snes_video_refresh(ushort* data, int width, int height, int pitch)
 		{
