@@ -11,5 +11,6 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<Analyzer Include="$(ProjectDir)../../References/BizHawk.SrcGen.ReflectionCache.dll" />
+		<Analyzer Include="$(ProjectDir)../../References/BizHawk.SrcGen.ServiceProps.dll" />
 	</ItemGroup>
 </Project>

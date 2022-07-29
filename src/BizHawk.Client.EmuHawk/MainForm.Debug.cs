@@ -120,6 +120,7 @@ namespace BizHawk.Client.EmuHawk
 		{
 			public const string TOOL_NAME = "N64 Video Settings Fuzzer";
 
+			/// <remarks><see cref="GenEmuServicePropAttribute"><c>[GenEmuServiceProp]</c></see> doesn't work for inner classes, not sure what to do about that --yoshi</remarks>
 			[RequiredService]
 			private IEmulator? Emulator { get; set; }
 

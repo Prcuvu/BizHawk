@@ -36,12 +36,10 @@ using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
+	[GenEmuServiceProp(typeof(LibsnesCore), "Emulator")]
 	public unsafe partial class SNESGraphicsDebugger : ToolFormBase, IToolFormAutoConfig
 	{
 		private readonly List<DisplayTypeItem> displayTypeItems = new List<DisplayTypeItem>();
-
-		[RequiredService]
-		private LibsnesCore Emulator { get; set; }
 
 		[ConfigPersist]
 		public bool UseUserBackdropColor
@@ -104,7 +102,9 @@ namespace BizHawk.Client.EmuHawk
 			UserBackdropColor = -1;
 		}
 
-		private LibsnesCore currentSnesCore;
+		/// <remarks>wtf is the point of this --yoshi</remarks>
+		private LibsnesCore/*?*/ currentSnesCore = null;
+
 		protected override void OnClosed(EventArgs e)
 		{
 			base.OnClosed(e);
@@ -169,10 +169,6 @@ namespace BizHawk.Client.EmuHawk
 			if (currentSnesCore != Emulator)
 			{
 				currentSnesCore?.ScanlineHookManager.Unregister(this);
-			}
-
-			if (currentSnesCore != Emulator && Emulator != null)
-			{
 				suppression = true;
 				comboPalette.SelectedValue = Emulator.CurrPalette;
 				RefreshBGENCheckStatesFromConfig();
@@ -181,13 +177,8 @@ namespace BizHawk.Client.EmuHawk
 
 			currentSnesCore = Emulator;
 
-			if (currentSnesCore != null)
-			{
-				if (Visible && checkScanlineControl.Checked)
-					currentSnesCore.ScanlineHookManager.Register(this, ScanlineHook);
-				else
-					currentSnesCore.ScanlineHookManager.Unregister(this);
-			}
+			if (Visible && checkScanlineControl.Checked) currentSnesCore.ScanlineHookManager.Register(this, ScanlineHook);
+			else currentSnesCore.ScanlineHookManager.Unregister(this);
 		}
 
 		private void ScanlineHook(int line)
