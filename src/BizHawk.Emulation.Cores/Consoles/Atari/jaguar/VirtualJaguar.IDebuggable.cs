@@ -26,9 +26,6 @@ namespace BizHawk.Emulation.Cores.Atari.Jaguar
 		public void SetCpuRegister(string register, int value)
 			=> _core.SetRegister((LibVirtualJaguar.M68KRegisters)Enum.Parse(typeof(LibVirtualJaguar.M68KRegisters), register.ToUpperInvariant()), value);
 
-		public bool CanStep(StepType type)
-			=> false;
-
 		[FeatureNotImplemented]
 		public void Step(StepType type)
 			=> throw new NotImplementedException();
